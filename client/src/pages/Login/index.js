@@ -14,7 +14,7 @@ export default function Login(){
                         <h1>Access your Account</h1>
                         <input placeholder="Username"></input>
                         <input type="password" placeholder="Password"></input>
-                        <button type="submit">Login</button>
+                        <button className="button" type="submit">Login</button>
                     </form>
                 </section>
 
