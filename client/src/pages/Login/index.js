@@ -1,4 +1,4 @@
-import React, { Children } from 'react';
+import React from 'react';
 import './styles.css';
 
 import logoImage from '../../assets/logo.svg';

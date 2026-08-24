@@ -8,6 +8,7 @@
 .book-container header{
     display: flex;
     align-items: center;
+    gap: 16px;
 }
 
 .book-container header span{
@@ -80,8 +81,8 @@
 
 .book-container ul li strong{
     display: block;
-    margin-botton: 16px;
-     color: #41414D;
+    margin-bottom: 16px;
+    color: #41414D;
 }
 
 .book-container ul li p + strong{

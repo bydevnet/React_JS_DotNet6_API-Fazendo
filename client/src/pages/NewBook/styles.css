@@ -1,0 +1,96 @@
+:root {
+  --color-bg: #F0F0F5;
+  --color-text-secondary: #737380;
+  --color-border: #D7D7CC;
+  --color-primary: #8257E5;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+.new-book-container {
+  width: 100%;
+  max-width: 1120px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 24px; /* evita que o conteúdo encoste nas bordas da tela */
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.new-book-container .content {
+  width: 100%;
+  padding: 64px; /* "96%" estava incorreto: padding em % é relativo à largura e "explode" o layout */
+  background: var(--color-bg);
+  box-shadow: 0 0 100px var(--shadow-color);
+  border-radius: 8px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-wrap: wrap; /* permite quebrar em telas menores em vez de estourar */
+  gap: 32px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* unifiquei as duas regras que eram idênticas
+   (.content section e section.form) em uma só */
+.new-book-container .content section {
+  width: 100%;
+  max-width: 350px;
+}
+
+.new-book-container .content section img {
+  width: 45%;
+  margin: 0 auto;
+  display: block;
+}
+
+.new-book-container .content section h1 {
+  margin: 48px 0 24px;
+  font-size: 32px;
+  line-height: 1.2;
+}
+
+.new-book-container .content section p {
+  font-size: 17px;
+  color: var(--color-text-secondary);
+  line-height: 32px;
+}
+
+.new-book-container .content form {
+  width: 100%;
+  max-width: 450px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.new-book-container .content form input {
+  width: 100%;
+  margin-top: 8px;
+  padding: 12px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.new-book-container .content form input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+/* Responsividade básica para telas menores */
+@media (max-width: 768px) {
+  .new-book-container .content {
+    padding: 32px;
+  }
+
+  .new-book-container .content section h1 {
+    font-size: 24px;
+    margin-top: 24px;
+  }
+}

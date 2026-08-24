@@ -10,10 +10,10 @@ export default function NewBook(){
             <div className="content">
                 <section className="form">
                     <img src={logoImage} alt="Erudio"/>
-                    <h1>Add new Book</h1>
+                    <h1>Add New Book</h1>
                     <p>Enter the book information and click on 'Add'!</p>
                     <Link className="back-link" to={"/books"}>
-                        <FiArrowLeft size={16} color="#251fc5"/>
+                        <FiArrowLeft size={16} color="#251fc5"/>Home Page
                     </Link>
                 </section>
                 <form>
