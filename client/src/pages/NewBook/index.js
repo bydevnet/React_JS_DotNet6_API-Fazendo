@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { Link, useParams } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import './styles.css';
@@ -8,30 +8,53 @@ import {useNavigate} from 'react-router-dom';
 
 export default function NewBook(){
 
+    const [id, setId] = useState(null);
     const [author, setAuthor] = useState('');
     const [title, setTitle] = useState('');
-    const [lauchDate, setLauchDate] = useState('');
+    const [launchDate, setLaunchDate] = useState('');
     const [price, setPrice] = useState('');
     const {bookId} = useParams();
     const navigate = useNavigate();
+
+    const accessToken = localStorage.getItem('accessToken');
+
+    const authorization = {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    }
+
+    useEffect(() => {
+        if(bookId === '0') return;
+        else loadBook();
+    }, bookId);
+
+    async function loadBook() {
+        try{
+            const response = await api.get(`api/book/v1/${bookId}`, authorization);
+            let adjusteDate = response.data.launchDate.split("T", 10)[0];
+            setId(response.data.id);
+            setTitle(response.data.title);
+            setAuthor(response.data.author);
+            setPrice(response.data.price);
+            setLaunchDate(adjusteDate);
+        }catch{
+            alert('Error recovering Book! Try again!');
+            navigate('/books');
+        }
+    }
 
     async function createNewBook(e){
         e.preventDefault();
         const data = {
             title,
             author,
-            lauchDate,
+            launchDate,
             price
-        }
-
-        const accessToken = localStorage.getItem('accessToken');
+        }        
     
         try{
-            await api.post('api/Book/v1', data, {
-                headers:{
-                    Authorization: `Bearer ${accessToken}`
-                }
-            });
+            await api.post('api/Book/v1', data, authorization);
         }catch{
             alert('Error while recording Book! Try again!')
         }
@@ -62,8 +85,8 @@ export default function NewBook(){
                     />
                     <input 
                         type="date"
-                        value={lauchDate}
-                        onChange={e => setLauchDate(e.target.value)}
+                        value={launchDate}
+                        onChange={e => setLaunchDate(e.target.value)}
                     />
                     <input 
                         placeholder="Price"
