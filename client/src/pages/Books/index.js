@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FiPower, FiEdit, FiTrash2 } from 'react-icons/fi';
 import './styles.css';
 import logoImage from '../../assets/logo.svg';
@@ -10,9 +10,10 @@ export default function Books(){
     const [books, setBooks] = useState([]);
     const userName = localStorage.getItem('userName');
     const accessToken = localStorage.getItem('accessToken');
+    const navigate = useNavigate();
 
     useEffect(() => {
-        api.get('api/Book/v1/asc/5/1', {
+        api.get('api/Book/v1/asc/20/1', {
             headers:{
                 Authorization: `Bearer ${accessToken}`
             }
@@ -21,6 +22,33 @@ export default function Books(){
         })
     }, [accessToken]);
 
+    async function logout(){
+        try {
+            await api.get(`api/auth/v1/revoke`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            localStorage.clear();
+            navigate('/');
+        } catch {
+            alert('Logout failed! Try again!')
+        }
+    }
+
+    async function deleteBook(id){
+        try {
+            await api.delete(`api/Book/v1/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            setBooks(books.filter(book => book.id !== id))
+        } catch {
+            alert('Delete failed! Try again!')
+        }
+    }
+
     return (
         <div className="book-container">
             <header>
@@ -28,7 +56,7 @@ export default function Books(){
                 <spam>Welcome, <strong>{userName.toUpperCase()}</strong>!</spam>
                 <Link className="button" to="/book/new">Add New Book</Link>           
                 <button type="button">
-                    <FiPower size={18} color="#251FC5"></FiPower>
+                    <FiPower onClick={logout} size={18} color="#251FC5"></FiPower>
                 </button>
             </header>
             <h1>Registered Books</h1>
@@ -48,7 +76,7 @@ export default function Books(){
                             <FiEdit size={20} color="#251FC5"/>
                         </button>
 
-                        <button type="button">
+                        <button onClick={() => deleteBook(book.id)} type="button">
                             <FiTrash2 size={20} color="#251FC5"/>
                         </button>
                     </li>
