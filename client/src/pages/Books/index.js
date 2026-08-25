@@ -8,27 +8,32 @@ import api from '../../services/api';
 export default function Books(){
 
     const [books, setBooks] = useState([]);
+    const [page, setPage] = useState([]);
     const userName = localStorage.getItem('userName');
     const accessToken = localStorage.getItem('accessToken');
+    
+    const authorization = {
+        header: {
+            Authorization: `Bearer${accessToken}`
+        }
+    }
+    
     const navigate = useNavigate();
 
     useEffect(() => {
-        api.get('api/Book/v1/asc/20/1', {
-            headers:{
-                Authorization: `Bearer ${accessToken}`
-            }
-        }).then(response => {
-            setBooks(response.data.list)
-        })
+        fetchMoreBooks();
     }, [accessToken]);
+
+    async function fetchMoreBooks() {
+        api.get(`'api/Book/v1/asc/20/${page}}'`, authorization).then(response => {
+            setBooks([...books, ...response.data.list])
+            setPage(page + 1);
+        })
+    }
 
     async function logout(){
         try {
-            await api.get(`api/auth/v1/revoke`, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
-            });
+            await api.get(`api/auth/v1/revoke`, authorization);
             localStorage.clear();
             navigate('/');
         } catch {
@@ -46,11 +51,7 @@ export default function Books(){
 
     async function deleteBook(id){
         try {
-            await api.delete(`api/Book/v1/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
-            });
+            await api.delete(`api/Book/v1/${id}`, authorization);
             setBooks(books.filter(book => book.id !== id))
         } catch {
             alert('Delete failed! Try again!')
@@ -90,6 +91,7 @@ export default function Books(){
                     </li>
                 ))}
             </ul>
+            <button ></button>
         </div>
     );
 }
