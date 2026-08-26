@@ -8,13 +8,13 @@ import api from '../../services/api';
 export default function Books(){
 
     const [books, setBooks] = useState([]);
-    const [page, setPage] = useState([]);
+    const [page, setPage] = useState(1);
     const userName = localStorage.getItem('userName');
     const accessToken = localStorage.getItem('accessToken');
     
     const authorization = {
-        header: {
-            Authorization: `Bearer${accessToken}`
+        headers: {
+            Authorization: `Bearer ${accessToken}`
         }
     }
     
@@ -25,10 +25,9 @@ export default function Books(){
     }, [accessToken]);
 
     async function fetchMoreBooks() {
-        api.get(`'api/Book/v1/asc/20/${page}}'`, authorization).then(response => {
-            setBooks([...books, ...response.data.list])
-            setPage(page + 1);
-        })
+        const response = await api.get(`api/Book/v1/asc/2/${page}`, authorization);
+        setBooks([...books, ...response.data.list])
+        setPage(page + 1);
     }
 
     async function logout(){
@@ -91,7 +90,7 @@ export default function Books(){
                     </li>
                 ))}
             </ul>
-            <button ></button>
+            <button type="button" className="button" onClick={fetchMoreBooks}>Load More</button>
         </div>
     );
 }
